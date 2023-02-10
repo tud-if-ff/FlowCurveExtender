@@ -13,9 +13,9 @@ def status_setter(message):
     def decorate(method):
         @wraps(method)
         def _impl(self, *method_args, **method_kwargs):
-            self.set_status(message)
+            self.set_status_msg(message, update=True)
             method_output = method(self, *method_args, **method_kwargs)
-            self.set_status("Ready")
+            self.set_status_msg("Ready", update=False)
             return method_output
         return _impl
     return decorate
@@ -52,6 +52,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.pushButton_A_compute.clicked.connect(self.analyse)
         self.pushButton_A_update_plot.clicked.connect(self.update_analyse_plot)
         self.pushButton_A_stress_strain_pop.clicked.connect(self.pop_up_stress_strain_plot)
+        self.pushButton_A_strain_rate_pop.clicked.connect(self.pop_up_stress_strain_rate)
         self.pushButton_A_C_strain_line_plot.clicked.connect(self.pop_up_strain_line_plot)
         self.comboBox_A_C_SL_name.currentIndexChanged.connect(self.combo_timesteps_adapt)
 
@@ -72,47 +73,42 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.checkBox_FY_lw_strain.stateChanged.connect(self.enable_box_bound_young)
 
         self.pushButton_FH_plot.clicked.connect(self.plot_plastics)
+        self.pushButton_FY_strain_diagram.clicked.connect(self.plot_strain_diagram)
 
         # %%% Status bar
         self.Qstatus_label = QLabel(parent=self.statusbar)
+        self.Qstatus_label.setMinimumSize(QSize(100, 0))
         self.statusbar.addWidget(self.Qstatus_label)
 
-        self.Qstatus_label.setText("Ready")
 
-
-        # %%% Set Activation Status
-        #self.
-
-        # rapid_testing
-
+        # %%% Prepare Popup
         self.pop_up = MplWidget(parent=None)
 
-        if True:
-            self.load_files([r"D:\HDD_Documents\Projet\ZugVersuch\CodeBase\Cut_Line_GUI\data_test\AA6014_0_QS_V2.aramis.hdf5",])
-            #self.orient_z()
-            #self.orient_vertical()
-            #self.orient_vertical()
-            self.analyse()
+        # %%% Set Activation Status
+        self.set_status_msg("Ready")
 
-    def set_status(self, status):
+
+    def set_status_msg(self, status, update=True):
         self.Qstatus_label.setText(status)
-        self.Qstatus_label.update()
+        if update:
+            self.Qstatus_label.repaint()
+            self.statusbar.repaint()
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%     Action for toolbar
     @status_setter(message="Loading Files...")
     def load_files(self, paths=None):
         if paths is None:
-            paths = QFileDialog.getOpenFileNames(self, "Open Image", "D:\HDD_Documents\Projet\ZugVersuch\CodeBase\Cut_Line_GUI\data_test", "DIC Exchange Files (*.hf5, *.hdf5)")[0]
+            paths = QFileDialog.getOpenFileNames(self, "Open Image", "~", "DIC Exchange Files (*.hf5, *.hdf5)")[0]
 
-        self.TestSeries = TensileTestSeries.load_from_paths(paths)
-        self.spinBox_Orient_timestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
-        self.spinBox_Orient_timestep.setMaximum(self.TestSeries.get_timestep_safe_index())
-        self.spinBox_A_plottimestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
-        self.spinBox_A_plottimestep.setMaximum(self.TestSeries.get_timestep_safe_index())
-        self.update_orient_plot()
+        if len(paths) != 0:
+            self.TestSeries = TensileTestSeries.load_from_paths(paths)
+            self.spinBox_Orient_timestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
+            self.spinBox_Orient_timestep.setMaximum(self.TestSeries.get_timestep_safe_index())
+            self.spinBox_A_plottimestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
+            self.spinBox_A_plottimestep.setMaximum(self.TestSeries.get_timestep_safe_index())
+            self.update_orient_plot()
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      Action for Orient
-    @status_setter(message="Plotting...")
     def update_orient_plot(self):
         keyword = self.comboBox_Orient_Field.currentText()
         timestep = self.spinBox_Orient_timestep.value()
@@ -249,6 +245,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             [a_mpl_wdiget.get_ax().set_ylabel("Y axis") for a_mpl_wdiget in self.mpl_widget_analyse]
             [a_mpl_wdiget.draw() for a_mpl_wdiget in self.mpl_widget_analyse]
 
+    def pop_up_stress_strain_rate(self):
+        self.pop_up = MplWidget(parent=None)
+        self.pop_up.plot_clear()
+        self.TestSeries.get_plot_stress_strain_rate(self.pop_up.get_ax())
+        self.pop_up.setVisible(True)
+
     def pop_up_stress_strain_plot(self):
         self.pop_up = MplWidget(parent=None)
         self.pop_up.plot_clear()
@@ -384,6 +386,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                                                                    alpha=0.1))
 
         self.mplwidget_FY_plot.draw()
+
+    def plot_strain_diagram(self):
+        self.pop_up = MplWidget(parent=None)
+        self.pop_up.plot_clear()
+        self.pop_up.plot_clear()
+        self.TestSeries.plot_strain_diagram(self.pop_up.get_ax())
+        self.pop_up.get_ax().grid()
+        self.pop_up.draw()
+        self.pop_up.setVisible(True)
 
     def plot_plastics(self):
         self.mplwidget_FH.plot_clear()

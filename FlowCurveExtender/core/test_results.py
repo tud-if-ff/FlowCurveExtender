@@ -6,6 +6,8 @@ from scipy.stats import t
 
 class AnalysisResult(ABC):
     def __init__(self, test_parent, stress: np.ndarray, time: np.ndarray, strain: np.ndarray):
+        self.stress_el = None
+        self.strain_el = None
         self.stress_pl = None
         self.poisson = None
         self.poisson_reg = None
@@ -33,28 +35,34 @@ class AnalysisResult(ABC):
         loc_strain = np.logical_and(self.strain[1] <= upper_strain, self.strain[1] >= lower_strain)
 
         loc = np.logical_and(loc_stress, loc_strain)
+        self.strain_el = self.strain[:, loc]
+        self.stress_el = self.stress[loc]
+
         self.young_reg = stats.linregress(self.strain[1, loc], self.stress[loc])
         self.young_mod = self.young_reg.slope
         self.young_inter = self.young_reg.intercept
         tinv = lambda p, df: abs(t.ppf(p / 2, df))
         self.young_conf = tinv(0.05, len(self.stress[loc]) - 2) * self.young_reg.stderr
 
-        self.poisson_reg = stats.linregress(self.stress[loc], self.strain[0, loc])
-        self.poisson = -self.young_mod * self.poisson_reg.slope
+        self.poisson_reg = stats.linregress(self.strain[1, loc], self.strain[0, loc])
+        self.poisson = -self.poisson_reg.slope
         self.poisson_inter = self.poisson_reg.intercept
-        self.poisson_conf = -self.young_mod * tinv(0.05, len(self.stress[loc]) - 2) * self.poisson_reg.stderr
+        self.poisson_conf = tinv(0.05, len(self.stress[loc]) - 2) * self.poisson_reg.stderr
 
     def get_elast_reg_string_result(self):
         buff = self.test_parent.name + "\n"
 
-        buff += "fitted young modulus: {mod:.0f} ±{conf:.0f} (±{confp:.2f}%)\n".format(
+        buff += "fitted young modulus: {mod:.0f} ±{conf:.0f} (±{confp:.3f}%)\n".format(
             mod=self.young_mod, conf=self.young_conf, confp=self.young_conf / self.young_mod)
 
         buff += "regression quality: R²={R_sq:.4f}\n".format(
             R_sq=self.young_reg.rvalue ** 2)
 
-        buff += "fitted poisson coeff: {mod:.3f} ±{conf:5f}\n".format(
-            mod=self.poisson, conf=self.poisson_conf)
+        buff += "fitted poisson coeff: {mod:.3f} ±{conf:5f} (±{confp:.3f}%)\n".format(
+            mod=self.poisson, conf=self.poisson_conf, confp=self.poisson_conf / self.poisson)
+
+        buff += "regression quality: R²={R_sq:.4f}\n".format(
+            R_sq=self.poisson_reg.rvalue ** 2)
         return buff
 
     def compute_plastic(self, elastics):
@@ -62,7 +70,7 @@ class AnalysisResult(ABC):
         pcoe = elastics["v"]
         self.strain_pl = self.strain - np.stack([self.stress * pcoe / E_mod, self.stress / E_mod, self.stress * 0])
         max_strain = np.argmax(self.stress)
-        min_strain = np.argmax(np.where(self.strain_pl[1] <= 0)) + 1
+        min_strain = np.max(np.where(self.strain_pl[1] <= 0)) + 1
         self.strain_pl = self.strain_pl[:, min_strain:max_strain]
         self.stress_pl = self.stress[min_strain:max_strain]
 

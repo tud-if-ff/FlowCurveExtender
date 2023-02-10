@@ -99,20 +99,20 @@ class TensileTestSeries:
             axes.set_ylabel("Force")
         axes.legend()
 
-    def get_plot_stress_strain_alt(self, axes):
+    def get_plot_stress_strain(self, axes):
         for i in range(len(self.tensile_tests)):
             stress = self.tensile_tests[i].analysis.stress
-            strain = self.tensile_tests[i].analysis.strain[0, :]
+            strain = self.tensile_tests[i].analysis.strain[1, :]
             axes.plot(strain, stress, label=self.get_names()[i])
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
 
-    def get_plot_stress_strain(self, axes):
+    def get_plot_stress_strain_rate(self, axes):
         for i in range(len(self.tensile_tests)):
             time_rate = np.diff(self.tensile_tests[i].dic_results.time)
-            strain_rate = np.diff(self.tensile_tests[i].analysis.strain[0, :])
-            strain = self.tensile_tests[i].analysis.strain[0, :]
+            strain_rate = np.diff(self.tensile_tests[i].analysis.strain[1, :])
+            strain = self.tensile_tests[i].analysis.strain[1, :]
             axes.plot(strain[1:], np.nan_to_num(strain_rate/time_rate), label=self.get_names()[i])
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
@@ -144,6 +144,15 @@ class TensileTestSeries:
 
         axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
         axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
+        axes.legend()
+
+    def plot_strain_diagram(self, axes):
+        for i in range(len(self.tensile_tests)):
+            strain_xx = self.tensile_tests[i].analysis.strain_el[0, :]
+            strain_yy = self.tensile_tests[i].analysis.strain_el[1, :]
+            axes.plot(strain_xx, strain_yy, label=self.get_names()[i])
+        axes.set_xlabel(r"Strain ($\varepsilon_{xx}$)")
+        axes.set_ylabel(r"Strain ($\varepsilon_{yy}$)")
         axes.legend()
 
 
