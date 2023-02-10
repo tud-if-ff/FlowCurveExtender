@@ -99,5 +99,3 @@ class TensileTest(ABC):
             self.analysis = traditional_stress_from_tensile(self, **args)
 
         self.analysed = True
-
-

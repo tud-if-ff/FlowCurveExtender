@@ -599,6 +599,9 @@
                 </item>
                 <item row="1" column="0">
                  <widget class="QLabel" name="lineResolutionLabel">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="text">
                    <string>Line resolution:</string>
                   </property>
@@ -658,6 +661,9 @@
                 </item>
                 <item row="1" column="1">
                  <widget class="QSpinBox" name="SpinBox_A_C_line_res">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
                   <property name="maximum">
                    <number>250</number>
                   </property>
@@ -874,14 +880,28 @@
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_A_stress_strain_pop">
-           <property name="text">
-            <string>Plot stress strain diagram</string>
-           </property>
-          </widget>
+          <layout class="QHBoxLayout" name="horizontalLayout_6">
+           <item>
+            <widget class="QPushButton" name="pushButton_A_stress_strain_pop">
+             <property name="text">
+              <string>Plot stress strain diagram</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QPushButton" name="pushButton_A_strain_rate_pop">
+             <property name="text">
+              <string>Plot strain rate</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </item>
          <item>
           <widget class="QPushButton" name="pushButton_A_validate">
+           <property name="enabled">
+            <bool>false</bool>
+           </property>
            <property name="text">
             <string>Validate</string>
            </property>
@@ -906,7 +926,7 @@
        </rect>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_Young">
        <attribute name="title">
@@ -1209,6 +1229,20 @@
             </widget>
            </item>
            <item>
+            <widget class="QPushButton" name="pushButton_FY_strain_diagram">
+             <property name="text">
+              <string>Plot strain diagram</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="Line" name="line_17">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="verticalSpacer_4">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -1223,6 +1257,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Validate</string>
              </property>
@@ -1237,7 +1274,7 @@
        <attribute name="title">
         <string>Hardening</string>
        </attribute>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>3</x>
@@ -1300,6 +1337,9 @@
            </item>
            <item>
             <widget class="QPushButton" name="pushButton_FH_export">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
              <property name="text">
               <string>Export</string>
              </property>
@@ -1320,7 +1360,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>27</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -1361,21 +1401,33 @@
    </property>
   </action>
   <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
   </action>
   <action name="actionExit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Exit</string>
    </property>
   </action>
   <action name="actionAramis_XML">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Aramis_XML</string>
    </property>
   </action>
   <action name="actionhelp">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Help</string>
    </property>
@@ -1390,7 +1442,7 @@
   <customwidget>
    <class>MplWidget</class>
    <extends>QWidget</extends>
-   <header>CutLineSimplified.gui.mplwidget.h</header>
+   <header>FlowCurveExtender.gui.mplwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

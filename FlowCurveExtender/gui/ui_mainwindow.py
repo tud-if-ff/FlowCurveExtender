@@ -45,12 +45,16 @@ class Ui_MainWindow(object):
         self.actionLoad.setObjectName(u"actionLoad")
         self.actionSave = QAction(MainWindow)
         self.actionSave.setObjectName(u"actionSave")
+        self.actionSave.setEnabled(False)
         self.actionExit = QAction(MainWindow)
         self.actionExit.setObjectName(u"actionExit")
+        self.actionExit.setEnabled(False)
         self.actionAramis_XML = QAction(MainWindow)
         self.actionAramis_XML.setObjectName(u"actionAramis_XML")
+        self.actionAramis_XML.setEnabled(False)
         self.actionhelp = QAction(MainWindow)
         self.actionhelp.setObjectName(u"actionhelp")
+        self.actionhelp.setEnabled(False)
         self.actionLicense = QAction(MainWindow)
         self.actionLicense.setObjectName(u"actionLicense")
         self.centralwidget = QWidget(MainWindow)
@@ -399,6 +403,7 @@ class Ui_MainWindow(object):
 
         self.lineResolutionLabel = QLabel(self.Widget_Analyse_Cut)
         self.lineResolutionLabel.setObjectName(u"lineResolutionLabel")
+        self.lineResolutionLabel.setEnabled(False)
 
         self.formLayout.setWidget(1, QFormLayout.LabelRole, self.lineResolutionLabel)
 
@@ -436,6 +441,7 @@ class Ui_MainWindow(object):
 
         self.SpinBox_A_C_line_res = QSpinBox(self.Widget_Analyse_Cut)
         self.SpinBox_A_C_line_res.setObjectName(u"SpinBox_A_C_line_res")
+        self.SpinBox_A_C_line_res.setEnabled(False)
         self.SpinBox_A_C_line_res.setMaximum(250)
         self.SpinBox_A_C_line_res.setSingleStep(10)
         self.SpinBox_A_C_line_res.setValue(50)
@@ -583,13 +589,24 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_A_Tools.addWidget(self.pushButton_A_compute)
 
+        self.horizontalLayout_6 = QHBoxLayout()
+        self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.pushButton_A_stress_strain_pop = QPushButton(self.horizontalLayoutWidget_2)
         self.pushButton_A_stress_strain_pop.setObjectName(u"pushButton_A_stress_strain_pop")
 
-        self.verticalLayout_A_Tools.addWidget(self.pushButton_A_stress_strain_pop)
+        self.horizontalLayout_6.addWidget(self.pushButton_A_stress_strain_pop)
+
+        self.pushButton_A_strain_rate_pop = QPushButton(self.horizontalLayoutWidget_2)
+        self.pushButton_A_strain_rate_pop.setObjectName(u"pushButton_A_strain_rate_pop")
+
+        self.horizontalLayout_6.addWidget(self.pushButton_A_strain_rate_pop)
+
+
+        self.verticalLayout_A_Tools.addLayout(self.horizontalLayout_6)
 
         self.pushButton_A_validate = QPushButton(self.horizontalLayoutWidget_2)
         self.pushButton_A_validate.setObjectName(u"pushButton_A_validate")
+        self.pushButton_A_validate.setEnabled(False)
 
         self.verticalLayout_A_Tools.addWidget(self.pushButton_A_validate)
 
@@ -785,12 +802,25 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addWidget(self.line_14)
 
+        self.pushButton_FY_strain_diagram = QPushButton(self.layoutWidget)
+        self.pushButton_FY_strain_diagram.setObjectName(u"pushButton_FY_strain_diagram")
+
+        self.verticalLayout_4.addWidget(self.pushButton_FY_strain_diagram)
+
+        self.line_17 = QFrame(self.layoutWidget)
+        self.line_17.setObjectName(u"line_17")
+        self.line_17.setFrameShape(QFrame.HLine)
+        self.line_17.setFrameShadow(QFrame.Sunken)
+
+        self.verticalLayout_4.addWidget(self.line_17)
+
         self.verticalSpacer_4 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_4.addItem(self.verticalSpacer_4)
 
         self.pushButton = QPushButton(self.layoutWidget)
         self.pushButton.setObjectName(u"pushButton")
+        self.pushButton.setEnabled(False)
 
         self.verticalLayout_4.addWidget(self.pushButton)
 
@@ -800,19 +830,19 @@ class Ui_MainWindow(object):
         self.tabWidget_2.addTab(self.tab_Young, "")
         self.tab_Hardening = QWidget()
         self.tab_Hardening.setObjectName(u"tab_Hardening")
-        self.widget = QWidget(self.tab_Hardening)
-        self.widget.setObjectName(u"widget")
-        self.widget.setGeometry(QRect(3, 10, 1171, 761))
-        self.verticalLayout_6 = QVBoxLayout(self.widget)
+        self.layoutWidget1 = QWidget(self.tab_Hardening)
+        self.layoutWidget1.setObjectName(u"layoutWidget1")
+        self.layoutWidget1.setGeometry(QRect(3, 10, 1171, 761))
+        self.verticalLayout_6 = QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_6.setObjectName(u"verticalLayout_6")
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
-        self.mplwidget_FH = MplWidget(self.widget)
+        self.mplwidget_FH = MplWidget(self.layoutWidget1)
         self.mplwidget_FH.setObjectName(u"mplwidget_FH")
         self.mplwidget_FH.setMinimumSize(QSize(0, 700))
 
         self.verticalLayout_6.addWidget(self.mplwidget_FH)
 
-        self.line_16 = QFrame(self.widget)
+        self.line_16 = QFrame(self.layoutWidget1)
         self.line_16.setObjectName(u"line_16")
         self.line_16.setFrameShape(QFrame.HLine)
         self.line_16.setFrameShadow(QFrame.Sunken)
@@ -825,15 +855,16 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5.addItem(self.horizontalSpacer)
 
-        self.pushButton_FH_plot = QPushButton(self.widget)
+        self.pushButton_FH_plot = QPushButton(self.layoutWidget1)
         self.pushButton_FH_plot.setObjectName(u"pushButton_FH_plot")
         self.pushButton_FH_plot.setMinimumSize(QSize(100, 0))
         self.pushButton_FH_plot.setMaximumSize(QSize(16777215, 30))
 
         self.horizontalLayout_5.addWidget(self.pushButton_FH_plot)
 
-        self.pushButton_FH_export = QPushButton(self.widget)
+        self.pushButton_FH_export = QPushButton(self.layoutWidget1)
         self.pushButton_FH_export.setObjectName(u"pushButton_FH_export")
+        self.pushButton_FH_export.setEnabled(False)
 
         self.horizontalLayout_5.addWidget(self.pushButton_FH_export)
 
@@ -845,7 +876,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1200, 27))
+        self.menubar.setGeometry(QRect(0, 0, 1200, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuTools = QMenu(self.menubar)
@@ -872,10 +903,10 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
 
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(0)
         self.tabWidget_orient.setCurrentIndex(-1)
         self.tabWidget_Analyse_plot.setCurrentIndex(-1)
-        self.tabWidget_2.setCurrentIndex(1)
+        self.tabWidget_2.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(MainWindow)
@@ -941,6 +972,7 @@ class Ui_MainWindow(object):
         self.lenghLabel.setText(QCoreApplication.translate("MainWindow", u"Lengh:", None))
         self.pushButton_A_compute.setText(QCoreApplication.translate("MainWindow", u"Compute", None))
         self.pushButton_A_stress_strain_pop.setText(QCoreApplication.translate("MainWindow", u"Plot stress strain diagram", None))
+        self.pushButton_A_strain_rate_pop.setText(QCoreApplication.translate("MainWindow", u"Plot strain rate", None))
         self.pushButton_A_validate.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Analyse), QCoreApplication.translate("MainWindow", u"Analyse", None))
         self.label_21.setText(QCoreApplication.translate("MainWindow", u"Strain", None))
@@ -962,6 +994,7 @@ class Ui_MainWindow(object):
         self.youngModLabel.setText(QCoreApplication.translate("MainWindow", u"Young mod.", None))
         self.poissonCoefLabel.setText(QCoreApplication.translate("MainWindow", u"Poisson coef.", None))
         self.pushButton_FY_overwrite.setText(QCoreApplication.translate("MainWindow", u"Overwrite", None))
+        self.pushButton_FY_strain_diagram.setText(QCoreApplication.translate("MainWindow", u"Plot strain diagram", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Young), QCoreApplication.translate("MainWindow", u"Young's modulus", None))
         self.pushButton_FH_plot.setText(QCoreApplication.translate("MainWindow", u"Plot", None))
