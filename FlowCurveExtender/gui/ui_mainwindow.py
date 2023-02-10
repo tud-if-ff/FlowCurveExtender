@@ -8,22 +8,19 @@
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
-    QMetaObject, QObject, QPoint, QRect,
-    QSize, QTime, QUrl, Qt)
-from PySide6.QtGui import (QAction, QBrush, QColor, QConicalGradient,
-    QCursor, QFont, QFontDatabase, QGradient,
-    QIcon, QImage, QKeySequence, QLinearGradient,
-    QPainter, QPalette, QPixmap, QRadialGradient,
-    QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QComboBox, QDoubleSpinBox,
-    QFormLayout, QFrame, QGridLayout, QHBoxLayout,
-    QLabel, QLineEdit, QMainWindow, QMenu,
-    QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
-    QSpinBox, QStatusBar, QTabWidget, QTextBrowser,
-    QVBoxLayout, QWidget)
+from PySide6.QtCore import (QCoreApplication, QLocale,
+                            QMetaObject, QRect,
+                            QSize, Qt)
+from PySide6.QtGui import (QAction, QFont)
+from PySide6.QtWidgets import (QCheckBox, QComboBox, QDoubleSpinBox,
+                               QFormLayout, QFrame, QGridLayout, QHBoxLayout,
+                               QLabel, QLineEdit, QMenu,
+                               QMenuBar, QPushButton, QSizePolicy, QSpacerItem,
+                               QSpinBox, QStatusBar, QTabWidget, QTextBrowser,
+                               QVBoxLayout, QWidget)
 
 from FlowCurveExtender.gui.mplwidget import MplWidget
+
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -134,7 +131,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout.addWidget(self.comboBox_Orient_Field, 3, 1, 1, 1)
 
-
         self.verticalLayout.addLayout(self.gridLayout)
 
         self.pushButton_Orient_UpdatePlot = QPushButton(self.horizontalLayoutWidget)
@@ -218,7 +214,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_2.addWidget(self.doubleSpinBox_Orient_rotatevalue, 0, 1, 1, 1)
 
-
         self.verticalLayout.addLayout(self.gridLayout_2)
 
         self.pushButton_Orient_RotatePos_2 = QPushButton(self.horizontalLayoutWidget)
@@ -237,7 +232,6 @@ class Ui_MainWindow(object):
         self.pushButton_Orientvalidate.setObjectName(u"pushButton_Orientvalidate")
 
         self.verticalLayout.addWidget(self.pushButton_Orientvalidate)
-
 
         self.horizontalLayout.addLayout(self.verticalLayout)
 
@@ -307,7 +301,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_A_plot.addWidget(self.spinBox_A_plottimestep, 2, 1, 1, 1)
 
-
         self.verticalLayout_A_Tools.addLayout(self.gridLayout_A_plot)
 
         self.pushButton_A_update_plot = QPushButton(self.horizontalLayoutWidget_2)
@@ -369,7 +362,6 @@ class Ui_MainWindow(object):
         self.doubleSpinBox_A_spec_thickness.setValue(1.000000000000000)
 
         self.gridLayout_A_Speciment.addWidget(self.doubleSpinBox_A_spec_thickness, 4, 1, 1, 1)
-
 
         self.verticalLayout_A_Tools.addLayout(self.gridLayout_A_Speciment)
 
@@ -456,7 +448,6 @@ class Ui_MainWindow(object):
 
         self.formLayout.setWidget(2, QFormLayout.FieldRole, self.SpinBox_A_C_side_res)
 
-
         self.verticalLayout_3.addLayout(self.formLayout)
 
         self.line_10 = QFrame(self.Widget_Analyse_Cut)
@@ -491,7 +482,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_3.addWidget(self.spinBox_A_C_SL_timesteps)
 
-
         self.verticalLayout_3.addLayout(self.horizontalLayout_3)
 
         self.comboBox_A_C_SL_which = QComboBox(self.Widget_Analyse_Cut)
@@ -516,7 +506,6 @@ class Ui_MainWindow(object):
         self.verticalSpacer_3 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
 
         self.verticalLayout_3.addItem(self.verticalSpacer_3)
-
 
         self.horizontalLayout_A_methods.addWidget(self.Widget_Analyse_Cut)
 
@@ -564,7 +553,6 @@ class Ui_MainWindow(object):
 
         self.formLayout_2.setWidget(1, QFormLayout.FieldRole, self.DoubleSpinBox_A_ISO_lengh)
 
-
         self.verticalLayout_2.addLayout(self.formLayout_2)
 
         self.line_15 = QFrame(self.Widget_Analyse_Iso)
@@ -578,9 +566,7 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_2.addItem(self.verticalSpacer)
 
-
         self.horizontalLayout_A_methods.addWidget(self.Widget_Analyse_Iso)
-
 
         self.verticalLayout_A_Tools.addLayout(self.horizontalLayout_A_methods)
 
@@ -601,7 +587,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_6.addWidget(self.pushButton_A_strain_rate_pop)
 
-
         self.verticalLayout_A_Tools.addLayout(self.horizontalLayout_6)
 
         self.pushButton_A_validate = QPushButton(self.horizontalLayoutWidget_2)
@@ -609,7 +594,6 @@ class Ui_MainWindow(object):
         self.pushButton_A_validate.setEnabled(False)
 
         self.verticalLayout_A_Tools.addWidget(self.pushButton_A_validate)
-
 
         self.horizontalLayout_2.addLayout(self.verticalLayout_A_Tools)
 
@@ -690,7 +674,6 @@ class Ui_MainWindow(object):
 
         self.gridLayout_4.addWidget(self.lineEdit_FY_lw_strain, 2, 1, 1, 1)
 
-
         self.verticalLayout_4.addLayout(self.gridLayout_4)
 
         self.label_22 = QLabel(self.layoutWidget)
@@ -737,7 +720,6 @@ class Ui_MainWindow(object):
         self.lineEdit_FY_lw_stress.setObjectName(u"lineEdit_FY_lw_stress")
 
         self.gridLayout_3.addWidget(self.lineEdit_FY_lw_stress, 2, 1, 1, 1)
-
 
         self.verticalLayout_4.addLayout(self.gridLayout_3)
 
@@ -787,7 +769,6 @@ class Ui_MainWindow(object):
 
         self.formLayout_3.setWidget(1, QFormLayout.FieldRole, self.poissonCoefLineEdit)
 
-
         self.verticalLayout_4.addLayout(self.formLayout_3)
 
         self.pushButton_FY_overwrite = QPushButton(self.layoutWidget)
@@ -823,7 +804,6 @@ class Ui_MainWindow(object):
         self.pushButton.setEnabled(False)
 
         self.verticalLayout_4.addWidget(self.pushButton)
-
 
         self.horizontalLayout_4.addLayout(self.verticalLayout_4)
 
@@ -868,7 +848,6 @@ class Ui_MainWindow(object):
 
         self.horizontalLayout_5.addWidget(self.pushButton_FH_export)
 
-
         self.verticalLayout_6.addLayout(self.horizontalLayout_5)
 
         self.tabWidget_2.addTab(self.tab_Hardening, "")
@@ -908,8 +887,8 @@ class Ui_MainWindow(object):
         self.tabWidget_Analyse_plot.setCurrentIndex(-1)
         self.tabWidget_2.setCurrentIndex(0)
 
-
         QMetaObject.connectSlotsByName(MainWindow)
+
     # setupUi
 
     def retranslateUi(self, MainWindow):
@@ -933,13 +912,15 @@ class Ui_MainWindow(object):
         self.label_11.setText(QCoreApplication.translate("MainWindow", u"Orient and rotate", None))
         self.pushButton_Orient_Center.setText(QCoreApplication.translate("MainWindow", u"Center", None))
         self.pushButton_Orient_OrientZ.setText(QCoreApplication.translate("MainWindow", u"Orient Z", None))
-        self.pushButton_Orient_OrientVertical.setText(QCoreApplication.translate("MainWindow", u"Orient vertical", None))
+        self.pushButton_Orient_OrientVertical.setText(
+            QCoreApplication.translate("MainWindow", u"Orient vertical", None))
         self.pushButton_Orient_RotateNeg.setText(QCoreApplication.translate("MainWindow", u"Rotate x -90", None))
         self.pushButton_Orient_RotatePos.setText(QCoreApplication.translate("MainWindow", u"Rotate x +90", None))
         self.label_4.setText(QCoreApplication.translate("MainWindow", u"Angle", None))
         self.pushButton_Orient_RotatePos_2.setText(QCoreApplication.translate("MainWindow", u"Rotate", None))
         self.pushButton_Orientvalidate.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Orient), QCoreApplication.translate("MainWindow", u"Orient", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Orient),
+                                  QCoreApplication.translate("MainWindow", u"Orient", None))
         self.label_12.setText(QCoreApplication.translate("MainWindow", u"Plotting", None))
         self.comboBox_A_plotvalue.setItemText(0, QCoreApplication.translate("MainWindow", u"None", None))
         self.comboBox_A_plotvalue.setItemText(1, QCoreApplication.translate("MainWindow", u"eps_xx", None))
@@ -966,15 +947,18 @@ class Ui_MainWindow(object):
         self.comboBox_A_C_SL_which.setItemText(0, QCoreApplication.translate("MainWindow", u"Upper", None))
         self.comboBox_A_C_SL_which.setItemText(1, QCoreApplication.translate("MainWindow", u"Lower", None))
 
-        self.pushButton_A_C_strain_line_plot.setText(QCoreApplication.translate("MainWindow", u"Plot cut line strains", None))
+        self.pushButton_A_C_strain_line_plot.setText(
+            QCoreApplication.translate("MainWindow", u"Plot cut line strains", None))
         self.label_3.setText(QCoreApplication.translate("MainWindow", u"ISO Evaluation", None))
         self.offsetCenterLabel.setText(QCoreApplication.translate("MainWindow", u"Offset Center", None))
         self.lenghLabel.setText(QCoreApplication.translate("MainWindow", u"Lengh:", None))
         self.pushButton_A_compute.setText(QCoreApplication.translate("MainWindow", u"Compute", None))
-        self.pushButton_A_stress_strain_pop.setText(QCoreApplication.translate("MainWindow", u"Plot stress strain diagram", None))
+        self.pushButton_A_stress_strain_pop.setText(
+            QCoreApplication.translate("MainWindow", u"Plot stress strain diagram", None))
         self.pushButton_A_strain_rate_pop.setText(QCoreApplication.translate("MainWindow", u"Plot strain rate", None))
         self.pushButton_A_validate.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Analyse), QCoreApplication.translate("MainWindow", u"Analyse", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Analyse),
+                                  QCoreApplication.translate("MainWindow", u"Analyse", None))
         self.label_21.setText(QCoreApplication.translate("MainWindow", u"Strain", None))
         self.checkBox_FY_up_strain.setText(QCoreApplication.translate("MainWindow", u"Active", None))
         self.label_18.setText(QCoreApplication.translate("MainWindow", u"Lower bound", None))
@@ -994,16 +978,19 @@ class Ui_MainWindow(object):
         self.youngModLabel.setText(QCoreApplication.translate("MainWindow", u"Young mod.", None))
         self.poissonCoefLabel.setText(QCoreApplication.translate("MainWindow", u"Poisson coef.", None))
         self.pushButton_FY_overwrite.setText(QCoreApplication.translate("MainWindow", u"Overwrite", None))
-        self.pushButton_FY_strain_diagram.setText(QCoreApplication.translate("MainWindow", u"Plot strain diagram", None))
+        self.pushButton_FY_strain_diagram.setText(
+            QCoreApplication.translate("MainWindow", u"Plot strain diagram", None))
         self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Young), QCoreApplication.translate("MainWindow", u"Young's modulus", None))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Young),
+                                    QCoreApplication.translate("MainWindow", u"Young's modulus", None))
         self.pushButton_FH_plot.setText(QCoreApplication.translate("MainWindow", u"Plot", None))
         self.pushButton_FH_export.setText(QCoreApplication.translate("MainWindow", u"Export", None))
-        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Hardening), QCoreApplication.translate("MainWindow", u"Hardening", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Fitting", None))
+        self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Hardening),
+                                    QCoreApplication.translate("MainWindow", u"Hardening", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab),
+                                  QCoreApplication.translate("MainWindow", u"Fitting", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuTools.setTitle(QCoreApplication.translate("MainWindow", u"Tools", None))
         self.menuconvert_to.setTitle(QCoreApplication.translate("MainWindow", u"convert_to", None))
         self.menuhelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi
-

@@ -1,12 +1,14 @@
-import numpy as np
-from PySide6.QtGui import *
-from PySide6.QtCore import *
-from PySide6.QtWidgets import *
-from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
-from FlowCurveExtender.gui.mplwidget import MplWidget
-from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
 from functools import wraps
+
 import matplotlib.patches as mpatches
+import numpy as np
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
+
+from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
+from FlowCurveExtender.gui.mplwidget import MplWidget
+from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
 
 
 def status_setter(message):
@@ -17,7 +19,9 @@ def status_setter(message):
             method_output = method(self, *method_args, **method_kwargs)
             self.set_status_msg("Ready", update=False)
             return method_output
+
         return _impl
+
     return decorate
 
 
@@ -33,7 +37,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.mpl_widget_analyse = None
 
         # %%% Connection
-        #%% Toolbar
+        # %% Toolbar
         self.actionLoad.triggered.connect(self.load_files)
 
         # %% Orient Tab
@@ -80,13 +84,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.Qstatus_label.setMinimumSize(QSize(100, 0))
         self.statusbar.addWidget(self.Qstatus_label)
 
-
         # %%% Prepare Popup
         self.pop_up = MplWidget(parent=None)
 
         # %%% Set Activation Status
         self.set_status_msg("Ready")
-
 
     def set_status_msg(self, status, update=True):
         self.Qstatus_label.setText(status)
@@ -188,16 +190,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def analyse(self):
         if self.Widget_Analyse_Cut.isEnabled():
             args = {
-            "method":"cut_line",
-            "offset_line": float(self.DoubleSpinBox_A_C_offset.value()),
-            "res_side": int(self.SpinBox_A_C_side_res.value()),
-            "res_cut_line": int(self.SpinBox_A_C_line_res.value()),
-            "kernel_size": float(self.DoubleSpinBox_A_C_kernel_size.value()),
-            "initial_width": float(self.doubleSpinBox_A_spec_width.value()),
-            "initial_thickness": float(self.doubleSpinBox_A_spec_thickness.value())}
+                "method": "cut_line",
+                "offset_line": float(self.DoubleSpinBox_A_C_offset.value()),
+                "res_side": int(self.SpinBox_A_C_side_res.value()),
+                "res_cut_line": int(self.SpinBox_A_C_line_res.value()),
+                "kernel_size": float(self.DoubleSpinBox_A_C_kernel_size.value()),
+                "initial_width": float(self.doubleSpinBox_A_spec_width.value()),
+                "initial_thickness": float(self.doubleSpinBox_A_spec_thickness.value())}
         else:
             args = {
-                "method":"ISO",
+                "method": "ISO",
                 "offset": float(self.doubleSpinBox_A_ISO_Offset.value()),
                 "lenght": float(self.DoubleSpinBox_A_ISO_lengh.value()),
                 "initial_width": float(self.doubleSpinBox_A_spec_width.value()),
@@ -239,7 +241,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             [a_mpl_wdiget.plot_clear() for a_mpl_wdiget in self.mpl_widget_analyse]
             self.TestSeries.get_plot_results([a_mpl_wdiget.get_ax() for a_mpl_wdiget in self.mpl_widget_analyse],
-                                         keyword=keyword, timestep=timestep)
+                                             keyword=keyword, timestep=timestep)
             [a_mpl_wdiget.get_ax().set_aspect("equal") for a_mpl_wdiget in self.mpl_widget_analyse]
             [a_mpl_wdiget.get_ax().set_xlabel("X axis") for a_mpl_wdiget in self.mpl_widget_analyse]
             [a_mpl_wdiget.get_ax().set_ylabel("Y axis") for a_mpl_wdiget in self.mpl_widget_analyse]
@@ -260,7 +262,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def pop_up_strain_line_plot(self):
         timestep = int(self.spinBox_A_C_SL_timesteps.value())
         name = self.comboBox_A_C_SL_name.currentText()
-        which= self.comboBox_A_C_SL_which.currentText()
+        which = self.comboBox_A_C_SL_which.currentText()
         self.pop_up = MplWidget(parent=None)
         self.pop_up.plot_clear()
         self.TestSeries.plot_strain_lines(self.pop_up.get_ax(), timestep=timestep, name=name, which=which)
@@ -320,30 +322,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             u_lw_strain = self.mplwidget_FY_plot.get_ax().get_xlim()[0]
             b_lw_strain = False
-        
+
         if self.checkBox_FY_lw_stress.isChecked():
             u_lw_stress = float(self.lineEdit_FY_lw_stress.text())
             b_lw_stress = True
         else:
             u_lw_stress = self.mplwidget_FY_plot.get_ax().get_ylim()[0]
             b_lw_stress = False
-        
+
         if self.checkBox_FY_up_strain.isChecked():
             u_up_strain = float(self.lineEdit_FY_up_strain.text())
             b_up_strain = True
         else:
             u_up_strain = self.mplwidget_FY_plot.get_ax().get_xlim()[1]
             b_up_strain = False
-        
+
         if self.checkBox_FY_up_stress.isChecked():
             u_up_stress = float(self.lineEdit_FY_up_stress.text())
             b_up_stress = True
         else:
             u_up_stress = self.mplwidget_FY_plot.get_ax().get_ylim()[1]
             b_up_stress = False
-            
+
         if b_lw_strain or b_up_strain:
-            delta = abs((u_up_strain - u_lw_strain)*0.15)
+            delta = abs((u_up_strain - u_lw_strain) * 0.15)
             if b_lw_strain:
                 b_lw_strain = u_lw_strain
                 u_lw_strain = u_lw_strain - delta
@@ -357,9 +359,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             b_up_strain = u_up_strain
             b_lw_strain = u_lw_strain
-        
+
         if b_lw_stress or b_up_stress:
-            delta = abs((u_up_stress - u_lw_stress)*0.15)
+            delta = abs((u_up_stress - u_lw_stress) * 0.15)
             if b_lw_stress:
                 b_lw_stress = u_lw_stress
                 u_lw_stress = u_lw_stress - delta

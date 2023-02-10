@@ -1,25 +1,24 @@
 import os
 
+import matplotlib.pyplot as plt
 import numpy as np
+from DIC_Exchange.HDF5Exchange import DIC_Result
 
 from FlowCurveExtender.core import tensile_test
-from DIC_Exchange.HDF5Exchange import DIC_Result
-import matplotlib
-import matplotlib.pyplot as plt
 
 
 class TensileTestSeries:
 
-    def __init__(self, the_tensile_tests:list[tensile_test.TensileTest]):
+    def __init__(self, the_tensile_tests: list[tensile_test.TensileTest]):
         self.tensile_tests = the_tensile_tests
         self.analysed = False
-        self.elastics = {"E":0.0, "v":0.0}
+        self.elastics = {"E": 0.0, "v": 0.0}
 
     def __len__(self):
         return len(self.tensile_tests)
 
     @classmethod
-    def load_from_paths(cls, paths:list[str]):
+    def load_from_paths(cls, paths: list[str]):
 
         tensile_test_list = []
         for a_path in paths:
@@ -50,7 +49,7 @@ class TensileTestSeries:
     def orient_vertical_one(self, index, timestep=0):
         self.tensile_tests[index].orient_vertical(timestep=0)
 
-    def get_plot_results(self, axes:list[plt.Axes], keyword=None, timestep=0):
+    def get_plot_results(self, axes: list[plt.Axes], keyword=None, timestep=0):
         if isinstance(axes, list):
             if len(axes) != len(self.tensile_tests):
                 raise TypeError("Incorrect list size")
@@ -59,7 +58,7 @@ class TensileTestSeries:
                 plots.append(self.tensile_tests[i].analysis.plot(axes[i], keyword=keyword, timestep=timestep))
         return plots
 
-    def get_plot_all(self, axes:list[plt.Axes], keyword=None, timestep=0):
+    def get_plot_all(self, axes: list[plt.Axes], keyword=None, timestep=0):
         if isinstance(axes, list):
             if len(axes) != len(self.tensile_tests):
                 raise TypeError("Incorrect list size")
@@ -113,7 +112,7 @@ class TensileTestSeries:
             time_rate = np.diff(self.tensile_tests[i].dic_results.time)
             strain_rate = np.diff(self.tensile_tests[i].analysis.strain[1, :])
             strain = self.tensile_tests[i].analysis.strain[1, :]
-            axes.plot(strain[1:], np.nan_to_num(strain_rate/time_rate), label=self.get_names()[i])
+            axes.plot(strain[1:], np.nan_to_num(strain_rate / time_rate), label=self.get_names()[i])
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
@@ -128,7 +127,7 @@ class TensileTestSeries:
 
         E_mod = np.average([self.tensile_tests[i].analysis.young_mod for i in range(len(self.tensile_tests))])
         p_coe = np.average([self.tensile_tests[i].analysis.poisson for i in range(len(self.tensile_tests))])
-        self.elastics = {"E":E_mod, "v":p_coe}
+        self.elastics = {"E": E_mod, "v": p_coe}
 
     def get_str_fit_elastics(self):
         buff = ""
@@ -155,7 +154,6 @@ class TensileTestSeries:
         axes.set_ylabel(r"Strain ($\varepsilon_{yy}$)")
         axes.legend()
 
-
     def compute_plastics(self):
         for i in range(len(self.tensile_tests)):
             self.tensile_tests[i].analysis.compute_plastic(self.elastics)
@@ -169,4 +167,3 @@ class TensileTestSeries:
         axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
         axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
-
