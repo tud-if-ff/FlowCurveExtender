@@ -12,7 +12,7 @@ Before using or installing the software please inform yourself about the license
 If you wish only to use the gui and you are a Windows user, you can download the latest
 compiled release (.exe) of this software [here](https://github.com/tud-if-ff/FlowCurveExtender/releases/latest).
 
-Otherwise, please instal the python packet DIC_Exchange first.
+Otherwise, please install the python packet DIC_Exchange first.
 Then download the latest wheel (.whl) [here](https://github.com/tud-if-ff/FlowCurveExtender/releases/latest).
 You can install the wheel with the following:
  
@@ -23,7 +23,7 @@ You can install the wheel with the following:
 To use the software you need to have your DIC information stored in an hdf5 data,
 for more information see here.  
 A conversion tool is provided for xml export of GOM Aramis Data.
-For an Aramis script to export data in xml, see the script folder of this repositery.  
+For an Aramis script to export data in xml, see the script folder of this repository.  
 Further documentation is available here.
 
 # License
@@ -59,7 +59,7 @@ of the technical university of Dresden.
 This following persons taked part in the software development:
 
 * Prof. Alexander Brosius (project management)
-* Rémi Lafarge (main develloper)
+* Rémi Lafarge (main developer)
 * Felix Hackenbeck
 
 
