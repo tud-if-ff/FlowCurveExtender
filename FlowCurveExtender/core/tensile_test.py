@@ -93,7 +93,7 @@ class TensileTest(ABC):
                                 self.dic_results.strains[timestep, :, 0],
                                 triangles=self.dic_results.mesh)
             box = ax.get_position()
-            axColor = ax.figure.add_axes([box.width, box.y0, 0.01, box.height])
+            axColor = ax.figure.add_axes([box.width-0.05, box.y0, 0.01, box.height])
             c_bar = plt.colorbar(plot, cax=axColor)
             c_bar.set_label(r"$\varepsilon_{xx}$")
         elif keyword == "eps_yy":
@@ -101,7 +101,7 @@ class TensileTest(ABC):
                                 self.dic_results.strains[timestep, :, 1],
                                 triangles=self.dic_results.mesh)
             box = ax.get_position()
-            axColor = ax.figure.add_axes([box.width, box.y0, 0.01, box.height])
+            axColor = ax.figure.add_axes([box.width-0.05, box.y0, 0.01, box.height])
             c_bar = plt.colorbar(plot, cax=axColor)
             c_bar.set_label(r"$\varepsilon_{yy}$")
         elif keyword == "eps_xy":
@@ -109,7 +109,7 @@ class TensileTest(ABC):
                                 self.dic_results.strains[timestep, :, 2],
                                 triangles=self.dic_results.mesh)
             box = ax.get_position()
-            axColor = ax.figure.add_axes([box.width, box.y0, 0.01, box.height])
+            axColor = ax.figure.add_axes([box.width-0.05, box.y0, 0.01, box.height])
             c_bar = plt.colorbar(plot, cax=axColor)
             c_bar.set_label(r"$\varepsilon_{xy}$")
         return plot
