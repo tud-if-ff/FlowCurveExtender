@@ -1,7 +1,9 @@
+import os
 from functools import wraps
 
 import matplotlib.patches as mpatches
 import numpy as np
+from DIC_Exchange.convert_to import load_from
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
@@ -39,6 +41,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # %%% Connection
         # %% Toolbar
         self.actionLoad.triggered.connect(self.load_files)
+        self.actionconvert_xml_to_hdf5.triggered.connect(self.convert_xml_to_hdf5)
 
         # %% Orient Tab
         self.pushButton_Orient_UpdatePlot.clicked.connect(self.update_orient_plot)
@@ -109,6 +112,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spinBox_A_plottimestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
             self.spinBox_A_plottimestep.setMaximum(self.TestSeries.get_timestep_safe_index())
             self.update_orient_plot()
+
+    @status_setter(message="Loading Files...")
+    def convert_xml_to_hdf5(self):
+
+        path = QFileDialog.getOpenFileName(self, "Open Image", "~", "Aramis XML File (*.xml)")[0]
+
+        if len(path) ==0:
+            return
+
+        path_dir = os.path.dirname(path)
+
+        dic_res = load_from(os.path.join(path_dir, path), force_rupture_ratio=.8)
+        dic_res.save_to_hdf5(os.path.join(path_dir, path[:-4] + ".hdf5"))
+        print("saved " + str(os.path.join(path_dir, path[:-4] + ".hdf5")))
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      Action for Orient
     def update_orient_plot(self):
