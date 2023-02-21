@@ -10,6 +10,7 @@ from PySide6.QtWidgets import *
 
 from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
 from FlowCurveExtender.gui.mplwidget import MplWidget
+from FlowCurveExtender.gui.popup_widget import PopupWidget
 from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
 
 
@@ -265,15 +266,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             [a_mpl_wdiget.draw() for a_mpl_wdiget in self.mpl_widget_analyse]
 
     def pop_up_stress_strain_rate(self):
-        self.pop_up = MplWidget(parent=None)
-        self.pop_up.plot_clear()
-        self.TestSeries.get_plot_stress_strain_rate(self.pop_up.get_ax())
+        self.pop_up = PopupWidget(self.TestSeries,"stress_strain_rate",parent=None)
         self.pop_up.setVisible(True)
 
     def pop_up_stress_strain_plot(self):
-        self.pop_up = MplWidget(parent=None)
-        self.pop_up.plot_clear()
-        self.TestSeries.get_plot_stress_strain(self.pop_up.get_ax())
+        self.pop_up = PopupWidget( self.TestSeries,"stress_strain", parent=None )
         self.pop_up.setVisible(True)
 
     def pop_up_strain_line_plot(self):
