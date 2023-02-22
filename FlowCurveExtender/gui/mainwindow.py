@@ -11,6 +11,7 @@ from PySide6.QtWidgets import *
 from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
 from FlowCurveExtender.gui.mplwidget import MplWidget
 from FlowCurveExtender.gui.popup_widget import PopupWidget
+from FlowCurveExtender.gui.convertHdf5Popup import ConvertHdf5Popup
 from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
 
 
@@ -90,6 +91,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # %%% Prepare Popup
         self.pop_up = MplWidget(parent=None)
+        self.convert_popup = None
 
         # %%% Set Activation Status
         self.set_status_msg("Ready")
@@ -117,16 +119,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @status_setter(message="Loading Files...")
     def convert_xml_to_hdf5(self):
 
-        path = QFileDialog.getOpenFileName(self, "Open Image", "~", "Aramis XML File (*.xml)")[0]
-
-        if len(path) ==0:
-            return
-
-        path_dir = os.path.dirname(path)
-
-        dic_res = load_from(os.path.join(path_dir, path), force_rupture_ratio=.8)
-        dic_res.save_to_hdf5(os.path.join(path_dir, path[:-4] + ".hdf5"))
-        print("saved " + str(os.path.join(path_dir, path[:-4] + ".hdf5")))
+        self.convert_popup = ConvertHdf5Popup(parent = None)
+        self.convert_popup.setVisible(True)
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      Action for Orient
     def update_orient_plot(self):
