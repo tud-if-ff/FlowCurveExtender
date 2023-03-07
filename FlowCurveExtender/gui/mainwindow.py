@@ -1,13 +1,17 @@
+import os
 from functools import wraps
 
 import matplotlib.patches as mpatches
 import numpy as np
+from DIC_Exchange.convert_to import load_from
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
 
 from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
 from FlowCurveExtender.gui.mplwidget import MplWidget
+from FlowCurveExtender.gui.popup_widget import PopupWidget
+from FlowCurveExtender.gui.convertHdf5Popup import ConvertHdf5Popup
 from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
 
 
@@ -39,6 +43,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # %%% Connection
         # %% Toolbar
         self.actionLoad.triggered.connect(self.load_files)
+        self.actionconvert_xml_to_hdf5.triggered.connect(self.convert_xml_to_hdf5)
 
         # %% Orient Tab
         self.pushButton_Orient_UpdatePlot.clicked.connect(self.update_orient_plot)
@@ -86,6 +91,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # %%% Prepare Popup
         self.pop_up = MplWidget(parent=None)
+        self.convert_popup = None
 
         # %%% Set Activation Status
         self.set_status_msg("Ready")
@@ -109,6 +115,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spinBox_A_plottimestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
             self.spinBox_A_plottimestep.setMaximum(self.TestSeries.get_timestep_safe_index())
             self.update_orient_plot()
+
+    @status_setter(message="Loading Files...")
+    def convert_xml_to_hdf5(self):
+
+        self.convert_popup = ConvertHdf5Popup(parent = None)
+        self.convert_popup.setVisible(True)
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      Action for Orient
     def update_orient_plot(self):
@@ -248,15 +260,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             [a_mpl_wdiget.draw() for a_mpl_wdiget in self.mpl_widget_analyse]
 
     def pop_up_stress_strain_rate(self):
-        self.pop_up = MplWidget(parent=None)
-        self.pop_up.plot_clear()
-        self.TestSeries.get_plot_stress_strain_rate(self.pop_up.get_ax())
+        self.pop_up = PopupWidget(self.TestSeries,"stress_strain_rate",parent=None)
         self.pop_up.setVisible(True)
 
     def pop_up_stress_strain_plot(self):
-        self.pop_up = MplWidget(parent=None)
-        self.pop_up.plot_clear()
-        self.TestSeries.get_plot_stress_strain(self.pop_up.get_ax())
+        self.pop_up = PopupWidget( self.TestSeries,"stress_strain", parent=None )
         self.pop_up.setVisible(True)
 
     def pop_up_strain_line_plot(self):

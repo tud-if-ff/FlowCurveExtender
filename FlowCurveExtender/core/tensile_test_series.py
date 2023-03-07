@@ -14,6 +14,7 @@
 import os
 
 import matplotlib.pyplot as plt
+import numpy
 import numpy as np
 from DIC_Exchange.HDF5Exchange import DIC_Result
 
@@ -111,24 +112,54 @@ class TensileTestSeries:
             axes.set_ylabel("Force")
         axes.legend()
 
-    def get_plot_stress_strain(self, axes):
+    def get_plot_stress_strain(self, axes, window_size, smoothing_enabled):
+        plots = []
         for i in range(len(self.tensile_tests)):
             stress = self.tensile_tests[i].analysis.stress
             strain = self.tensile_tests[i].analysis.strain[1, :]
-            axes.plot(strain, stress, label=self.get_names()[i])
+
+            if (smoothing_enabled):
+                window = np.ones(window_size) / window_size
+
+                convolution = np.convolve(stress, window, "same")
+                convolution = convolution[:len(convolution)-window_size]
+                convolution = np.concatenate((convolution, stress[len(stress)-window_size:]))
+                plot = axes.plot(strain, convolution, label=self.get_names()[i])
+            else:
+                plot = axes.plot(strain, stress, label=self.get_names()[i])
+
+            plots.append(plot)
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
+        return plots
 
-    def get_plot_stress_strain_rate(self, axes):
+    def get_plot_stress_strain_rate(self, axes, window_size, smoothing_enabled ):
+        plots = []
         for i in range(len(self.tensile_tests)):
             time_rate = np.diff(self.tensile_tests[i].dic_results.time)
             strain_rate = np.diff(self.tensile_tests[i].analysis.strain[1, :])
             strain = self.tensile_tests[i].analysis.strain[1, :]
-            axes.plot(strain[1:], np.nan_to_num(strain_rate / time_rate), label=self.get_names()[i])
+            strain_to_time_rate = np.nan_to_num(strain_rate / time_rate)
+
+            if(smoothing_enabled):
+
+                window = np.ones(window_size) / window_size
+
+                convolution = np.convolve(strain_to_time_rate, window, "same")
+                convolution = convolution[:len(convolution) - window_size]
+                convolution = np.concatenate(
+                    (convolution, strain_to_time_rate[len(strain_to_time_rate) - window_size:]))
+
+                plot = axes.plot(strain[1:], convolution, label=self.get_names()[i])
+            else:
+                plot = axes.plot(strain[1:], strain_to_time_rate, label=self.get_names()[i])
+
+            plots.append(plot)
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
+        return plots
 
     def plot_strain_lines(self, axes, name, timestep=-1, which="Upper"):
         i = self.get_names().index(name)
