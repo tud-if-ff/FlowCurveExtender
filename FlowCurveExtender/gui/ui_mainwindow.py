@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'mainWindow.ui'
+## Form generated from reading UI file 'mainwindow.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.4.2
 ##
@@ -63,11 +63,13 @@ class Ui_MainWindow(object):
         self.centralwidget.setObjectName(u"centralwidget")
         self.tabWidget = QTabWidget(self.centralwidget)
         self.tabWidget.setObjectName(u"tabWidget")
+        self.tabWidget.setEnabled(True)
         self.tabWidget.setGeometry(QRect(10, 10, 1181, 841))
         sizePolicy.setHeightForWidth(self.tabWidget.sizePolicy().hasHeightForWidth())
         self.tabWidget.setSizePolicy(sizePolicy)
         self.tab_Orient = QWidget()
         self.tab_Orient.setObjectName(u"tab_Orient")
+        self.tab_Orient.setEnabled(False)
         self.horizontalLayoutWidget = QWidget(self.tab_Orient)
         self.horizontalLayoutWidget.setObjectName(u"horizontalLayoutWidget")
         self.horizontalLayoutWidget.setGeometry(QRect(10, 10, 1151, 791))
@@ -76,7 +78,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.tabWidget_orient = QTabWidget(self.horizontalLayoutWidget)
         self.tabWidget_orient.setObjectName(u"tabWidget_orient")
-        self.tabWidget_orient.setEnabled(True)
+        self.tabWidget_orient.setEnabled(False)
         self.tabWidget_orient.setAutoFillBackground(False)
         self.tabWidget_orient.setTabPosition(QTabWidget.South)
         self.tabWidget_orient.setTabShape(QTabWidget.Rounded)
@@ -606,23 +608,20 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_A_Tools.addLayout(self.horizontalLayout_6)
 
-        self.pushButton_A_validate = QPushButton(self.horizontalLayoutWidget_2)
-        self.pushButton_A_validate.setObjectName(u"pushButton_A_validate")
-        self.pushButton_A_validate.setEnabled(False)
-
-        self.verticalLayout_A_Tools.addWidget(self.pushButton_A_validate)
-
 
         self.horizontalLayout_2.addLayout(self.verticalLayout_A_Tools)
 
         self.tabWidget.addTab(self.tab_Analyse, "")
-        self.tab = QWidget()
-        self.tab.setObjectName(u"tab")
-        self.tabWidget_2 = QTabWidget(self.tab)
+        self.tab_Fitting = QWidget()
+        self.tab_Fitting.setObjectName(u"tab_Fitting")
+        self.tab_Fitting.setEnabled(True)
+        self.tabWidget_2 = QTabWidget(self.tab_Fitting)
         self.tabWidget_2.setObjectName(u"tabWidget_2")
+        self.tabWidget_2.setEnabled(True)
         self.tabWidget_2.setGeometry(QRect(-6, -1, 1181, 811))
         self.tab_Young = QWidget()
         self.tab_Young.setObjectName(u"tab_Young")
+        self.tab_Young.setEnabled(False)
         self.layoutWidget = QWidget(self.tab_Young)
         self.layoutWidget.setObjectName(u"layoutWidget")
         self.layoutWidget.setGeometry(QRect(10, 10, 1160, 761))
@@ -656,7 +655,7 @@ class Ui_MainWindow(object):
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.checkBox_FY_up_strain = QCheckBox(self.layoutWidget)
         self.checkBox_FY_up_strain.setObjectName(u"checkBox_FY_up_strain")
-        self.checkBox_FY_up_strain.setEnabled(True)
+        self.checkBox_FY_up_strain.setEnabled(False)
         self.checkBox_FY_up_strain.setMaximumSize(QSize(70, 200))
 
         self.gridLayout_4.addWidget(self.checkBox_FY_up_strain, 0, 2, 1, 1)
@@ -675,7 +674,7 @@ class Ui_MainWindow(object):
 
         self.checkBox_FY_lw_strain = QCheckBox(self.layoutWidget)
         self.checkBox_FY_lw_strain.setObjectName(u"checkBox_FY_lw_strain")
-        self.checkBox_FY_lw_strain.setEnabled(True)
+        self.checkBox_FY_lw_strain.setEnabled(False)
         self.checkBox_FY_lw_strain.setMaximumSize(QSize(70, 200))
 
         self.gridLayout_4.addWidget(self.checkBox_FY_lw_strain, 2, 2, 1, 1)
@@ -820,18 +819,13 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_4.addItem(self.verticalSpacer_4)
 
-        self.pushButton = QPushButton(self.layoutWidget)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setEnabled(False)
-
-        self.verticalLayout_4.addWidget(self.pushButton)
-
 
         self.horizontalLayout_4.addLayout(self.verticalLayout_4)
 
         self.tabWidget_2.addTab(self.tab_Young, "")
         self.tab_Hardening = QWidget()
         self.tab_Hardening.setObjectName(u"tab_Hardening")
+        self.tab_Hardening.setEnabled(False)
         self.layoutWidget1 = QWidget(self.tab_Hardening)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
         self.layoutWidget1.setGeometry(QRect(3, 10, 1171, 761))
@@ -874,11 +868,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.addLayout(self.horizontalLayout_5)
 
         self.tabWidget_2.addTab(self.tab_Hardening, "")
-        self.tabWidget.addTab(self.tab, "")
+        self.tabWidget.addTab(self.tab_Fitting, "")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1200, 18))
+        self.menubar.setGeometry(QRect(0, 0, 1200, 23))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuTools = QMenu(self.menubar)
@@ -977,7 +971,6 @@ class Ui_MainWindow(object):
         self.pushButton_A_compute.setText(QCoreApplication.translate("MainWindow", u"Compute", None))
         self.pushButton_A_stress_strain_pop.setText(QCoreApplication.translate("MainWindow", u"Plot stress strain diagram", None))
         self.pushButton_A_strain_rate_pop.setText(QCoreApplication.translate("MainWindow", u"Plot strain rate", None))
-        self.pushButton_A_validate.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Analyse), QCoreApplication.translate("MainWindow", u"Analyse", None))
         self.label_21.setText(QCoreApplication.translate("MainWindow", u"Strain", None))
         self.checkBox_FY_up_strain.setText(QCoreApplication.translate("MainWindow", u"Active", None))
@@ -999,12 +992,11 @@ class Ui_MainWindow(object):
         self.poissonCoefLabel.setText(QCoreApplication.translate("MainWindow", u"Poisson coef.", None))
         self.pushButton_FY_overwrite.setText(QCoreApplication.translate("MainWindow", u"Overwrite", None))
         self.pushButton_FY_strain_diagram.setText(QCoreApplication.translate("MainWindow", u"Plot strain diagram", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Young), QCoreApplication.translate("MainWindow", u"Young's modulus", None))
         self.pushButton_FH_plot.setText(QCoreApplication.translate("MainWindow", u"Plot", None))
         self.pushButton_FH_export.setText(QCoreApplication.translate("MainWindow", u"Export", None))
         self.tabWidget_2.setTabText(self.tabWidget_2.indexOf(self.tab_Hardening), QCoreApplication.translate("MainWindow", u"Hardening", None))
-        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("MainWindow", u"Fitting", None))
+        self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Fitting), QCoreApplication.translate("MainWindow", u"Fitting", None))
         self.menuFile.setTitle(QCoreApplication.translate("MainWindow", u"File", None))
         self.menuTools.setTitle(QCoreApplication.translate("MainWindow", u"Tools", None))
         self.menuconvert_to.setTitle(QCoreApplication.translate("MainWindow", u"convert_to", None))

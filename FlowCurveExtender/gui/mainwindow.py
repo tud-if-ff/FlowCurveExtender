@@ -47,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # %% Orient Tab
         self.pushButton_Orient_UpdatePlot.clicked.connect(self.update_orient_plot)
+        self.pushButton_Orient_Center.clicked.connect(self.orient_center)
         self.pushButton_Orient_RotatePos.clicked.connect(self.rotate_p90)
         self.pushButton_Orient_RotateNeg.clicked.connect(self.rotate_n90)
         self.pushButton_Orient_OrientVertical.clicked.connect(self.orient_vertical)
@@ -89,6 +90,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.Qstatus_label.setMinimumSize(QSize(100, 0))
         self.statusbar.addWidget(self.Qstatus_label)
 
+        # %%% Enabling and disabling
+        self.tab_Orient.setEnabled(False)
+        self.tab_Analyse.setEnabled(False)
+        self.tab_Fitting.setEnabled(False)
+
         # %%% Prepare Popup
         self.pop_up = MplWidget(parent=None)
         self.convert_popup = None
@@ -115,6 +121,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spinBox_A_plottimestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
             self.spinBox_A_plottimestep.setMaximum(self.TestSeries.get_timestep_safe_index())
             self.update_orient_plot()
+        self.tab_Orient.setEnabled(True)
 
     @status_setter(message="Loading Files...")
     def convert_xml_to_hdf5(self):
@@ -141,6 +148,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         [a_mpl_wdiget.get_ax().set_xlabel("X axis") for a_mpl_wdiget in self.mpl_widget_orient]
         [a_mpl_wdiget.get_ax().set_ylabel("Y axis") for a_mpl_wdiget in self.mpl_widget_orient]
         [a_mpl_wdiget.draw() for a_mpl_wdiget in self.mpl_widget_orient]
+
+    @status_setter(message="Rotating...")
+    def orient_center(self):
+        self.TestSeries.center_all()
+        self.update_orient_plot()
 
     @status_setter(message="Orienting...")
     def orient_vertical(self):
@@ -171,6 +183,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def validate_orient(self):
         self.actionLoad.setDisabled(True)
         self.tab_Orient.setDisabled(True)
+        self.tab_Fitting.setEnabled(True)
+        self.tab_Analyse.setEnabled(True)
         self.tabWidget.setCurrentIndex(1)
 
         self.comboBox_A_C_SL_name.insertItems(0, self.TestSeries.get_names())
@@ -219,6 +233,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             }
 
         self.TestSeries.analyse(args)
+        self.update_analyse_plot()
 
     @status_setter(message="Plotting...")
     def update_analyse_plot(self):

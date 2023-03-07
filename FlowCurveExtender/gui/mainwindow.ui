@@ -41,6 +41,9 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <widget class="QTabWidget" name="tabWidget">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -59,6 +62,9 @@
      <number>0</number>
     </property>
     <widget class="QWidget" name="tab_Orient">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <attribute name="title">
       <string>Orient</string>
      </attribute>
@@ -75,7 +81,7 @@
        <item>
         <widget class="QTabWidget" name="tabWidget_orient">
          <property name="enabled">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="autoFillBackground">
           <bool>false</bool>
@@ -897,26 +903,22 @@
            </item>
           </layout>
          </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_A_validate">
-           <property name="enabled">
-            <bool>false</bool>
-           </property>
-           <property name="text">
-            <string>Validate</string>
-           </property>
-          </widget>
-         </item>
         </layout>
        </item>
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="tab_Fitting">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
      <attribute name="title">
       <string>Fitting</string>
      </attribute>
      <widget class="QTabWidget" name="tabWidget_2">
+      <property name="enabled">
+       <bool>true</bool>
+      </property>
       <property name="geometry">
        <rect>
         <x>-6</x>
@@ -929,6 +931,9 @@
        <number>0</number>
       </property>
       <widget class="QWidget" name="tab_Young">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <attribute name="title">
         <string>Young's modulus</string>
        </attribute>
@@ -988,7 +993,7 @@
              <item row="0" column="2">
               <widget class="QCheckBox" name="checkBox_FY_up_strain">
                <property name="enabled">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
                <property name="maximumSize">
                 <size>
@@ -1030,7 +1035,7 @@
              <item row="2" column="2">
               <widget class="QCheckBox" name="checkBox_FY_lw_strain">
                <property name="enabled">
-                <bool>true</bool>
+                <bool>false</bool>
                </property>
                <property name="maximumSize">
                 <size>
@@ -1255,22 +1260,15 @@
              </property>
             </spacer>
            </item>
-           <item>
-            <widget class="QPushButton" name="pushButton">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="text">
-              <string>Validate</string>
-             </property>
-            </widget>
-           </item>
           </layout>
          </item>
         </layout>
        </widget>
       </widget>
       <widget class="QWidget" name="tab_Hardening">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <attribute name="title">
         <string>Hardening</string>
        </attribute>
@@ -1360,7 +1358,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>18</height>
+     <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
