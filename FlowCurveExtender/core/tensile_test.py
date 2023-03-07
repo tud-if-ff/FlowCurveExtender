@@ -55,16 +55,16 @@ class TensileTest(ABC):
         self.dic_results.rotate(mat_rot)
 
     def orient_z(self, timestep=0):
-        center = np.average(self.dic_results.coords[timestep, :], axis=0)
         points = self.dic_results.coords[timestep]
-        points -= center
         u, d, vh = np.linalg.svd(points.T @ points)
         e_z = u[:, -1]
         e_z = e_z / np.linalg.norm(e_z)
-        e_y = np.cross(e_z, [0, 1, 0])
-        e_x = np.cross(e_z, e_y)
+        e_y = np.cross(e_z, [1, 0, 0])
+        e_x = np.cross(e_y, e_z)
         mat_rot = np.stack((e_x, e_y, e_z))
         self.dic_results.rotate(mat_rot)
+        angle_rotation = np.arccos(e_z[-1]) * 360/2/np.pi
+        #print(f"rotate from angle {angle_rotation}, {e_z}")
 
     def orient_vertical(self, timestep=0):
         points_xy = self.dic_results.coords[timestep, :, [0, 1]]
@@ -72,10 +72,13 @@ class TensileTest(ABC):
         eig_val, eig_vect = np.linalg.eig(cov)
         eig_vect = eig_vect[np.argsort(eig_val)]
         e_y = np.array([eig_vect[0, 1], eig_vect[1, 1], 0])
+        e_y /= np.linalg.norm(e_y)
         e_z = np.array([0, 0, 1])
         e_x = np.cross(e_y, e_z)
         mat_rot = np.stack((e_x, e_y, e_z))
         self.dic_results.rotate(mat_rot)
+        angle_rotation = np.arccos(e_y[0]) * 360 / 2 / np.pi
+        # print(f"rotate from angle {90 - angle_rotation}, {e_y}")
 
     def plot_on_ax(self, ax, keyword=None, timestep=0, kwargs=None):
         if timestep >= len(self.dic_results.time):

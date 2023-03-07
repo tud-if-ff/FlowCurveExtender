@@ -56,12 +56,17 @@ class TensileTestSeries:
         for i in range((len(self.tensile_tests))):
             self.tensile_tests[i].orient_z(timestep=0)
 
+    def center_all(self, timestep=0):
+        for i in range((len(self.tensile_tests))):
+            self.tensile_tests[i].center(timestep=0)
+
     def orient_vertical_all(self, timestep=0):
         for i in range((len(self.tensile_tests))):
             self.tensile_tests[i].orient_vertical(timestep=0)
 
     def orient_vertical_one(self, index, timestep=0):
         self.tensile_tests[index].orient_vertical(timestep=0)
+
 
     def get_plot_results(self, axes: list[plt.Axes], keyword=None, timestep=0):
         if isinstance(axes, list):

@@ -28,12 +28,17 @@ class Ui_PopupWidget(object):
         PopupWidget.resize(559, 470)
         self.verticalLayoutWidget = QWidget(PopupWidget)
         self.verticalLayoutWidget.setObjectName(u"verticalLayoutWidget")
-        self.verticalLayoutWidget.setGeometry(QRect(-1, 0, 561, 451))
+        self.verticalLayoutWidget.setGeometry(QRect(-1, 0, 561, 461))
         self.verticalLayout = QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.mplWidget = MplWidget(self.verticalLayoutWidget)
         self.mplWidget.setObjectName(u"mplWidget")
+        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.mplWidget.sizePolicy().hasHeightForWidth())
+        self.mplWidget.setSizePolicy(sizePolicy)
 
         self.verticalLayout.addWidget(self.mplWidget)
 
@@ -70,11 +75,11 @@ class Ui_PopupWidget(object):
 
         self.pushButton_exportData = QPushButton(self.verticalLayoutWidget)
         self.pushButton_exportData.setObjectName(u"pushButton_exportData")
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.pushButton_exportData.sizePolicy().hasHeightForWidth())
-        self.pushButton_exportData.setSizePolicy(sizePolicy)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.pushButton_exportData.sizePolicy().hasHeightForWidth())
+        self.pushButton_exportData.setSizePolicy(sizePolicy1)
 
         self.gridLayout.addWidget(self.pushButton_exportData, 1, 2, 1, 1)
 

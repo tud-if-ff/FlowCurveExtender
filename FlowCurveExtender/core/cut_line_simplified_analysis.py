@@ -89,6 +89,7 @@ def search_striction(dic_result, initial_width=20, res_line=100):
 def get_cut_lines(dic_results, offset=4, res_side=20, res_line=50, initial_width=20):
     """
     Find the parameter the cut line coordinates
+    :param dic_results:
     :param coords: the coordinate of the points cloud
     :param loc_right: mask for the right side
     :param loc_left: mask for the left side
