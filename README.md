@@ -60,6 +60,7 @@ This following persons taked part in the software development:
 
 * Prof. Alexander Brosius (project management)
 * Rémi Lafarge (main developer)
+* Robert König  
 * Felix Hackenbeck
 
 
