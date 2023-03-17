@@ -11,7 +11,20 @@
 #       You should have received a copy of the GNU Affero General Public License
 #       along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from FlowCurveExtender.__main__ import main
+from setuptools import setup
 
-if __name__ == "__main__":
-    main()
+setup(
+    name='FlowCurveExtender',
+    version='',
+    packages=['gui', 'core'],
+    package_dir={'': 'FlowCurveExtender'},
+    url='https://github.com/tud-if-ff/FlowCurveExtender',
+    license='AGPL v3.0',
+    author='Chair of Forming and Machining Processes, TU Dresden',
+    author_email='remi.lafarge@tu-dresden.de',
+    description='',
+    classifiers=['Private :: Do Not Upload',
+                 'Development Status :: 3 - Alpha',
+                 'Programming Language :: Python :: 3',
+                 'License :: OSI Approved :: GNU Affero General Public License v3 or later (AGPLv3+)']
+)
