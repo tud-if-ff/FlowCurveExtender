@@ -1,13 +1,12 @@
-import matplotlib.pyplot as plt
-from PySide6 import QtWidgets
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
-from matplotlib.backends.backend_qt5agg import FigureCanvas
-from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
 import matplotlib
+from PySide6 import QtWidgets
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT
+from matplotlib.figure import Figure
 
 # Ensure using PyQt5 backend
 matplotlib.use('QT5Agg')
+
 
 # Matplotlib canvas class to create figure
 class MplCanvas(Canvas):
@@ -30,13 +29,14 @@ class MplCanvas(Canvas):
         self.ax.legend()
         self.draw()
 
+
 # Matplotlib widget
 class MplWidget(QtWidgets.QWidget):
     def __init__(self, parent=None):
-        QtWidgets.QWidget.__init__(self, parent)   # Inherit from QWidget
-        self.canvas = MplCanvas()                  # Create canvas object
+        QtWidgets.QWidget.__init__(self, parent)  # Inherit from QWidget
+        self.canvas = MplCanvas()  # Create canvas object
         self.toolbar = NavigationToolbar2QT(self.canvas, self)
-        self.vbl = QtWidgets.QVBoxLayout()         # Set box for plotting
+        self.vbl = QtWidgets.QVBoxLayout()  # Set box for plotting
         self.vbl.addWidget(self.toolbar)
         self.vbl.addWidget(self.canvas)
         self.setLayout(self.vbl)

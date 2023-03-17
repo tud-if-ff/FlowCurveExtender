@@ -1,12 +1,20 @@
-import numpy as np
-from PySide6.QtGui import *
-from PySide6.QtCore import *
-from PySide6.QtWidgets import *
-from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
-from FlowCurveExtender.gui.mplwidget import MplWidget
-from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
+import os
 from functools import wraps
+
 import matplotlib.patches as mpatches
+import numpy as np
+import pandas as pd
+from DIC_Exchange.convert_to import load_from
+from PySide6 import QtWidgets
+from PySide6.QtCore import *
+from PySide6.QtGui import *
+from PySide6.QtWidgets import *
+
+from FlowCurveExtender.core.tensile_test_series import TensileTestSeries
+from FlowCurveExtender.gui.mplwidget import MplWidget
+from FlowCurveExtender.gui.popup_widget import PopupWidget
+from FlowCurveExtender.gui.convertHdf5Popup import ConvertHdf5Popup
+from FlowCurveExtender.gui.ui_mainwindow import Ui_MainWindow
 
 
 def status_setter(message):
@@ -17,7 +25,9 @@ def status_setter(message):
             method_output = method(self, *method_args, **method_kwargs)
             self.set_status_msg("Ready", update=False)
             return method_output
+
         return _impl
+
     return decorate
 
 
@@ -33,11 +43,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.mpl_widget_analyse = None
 
         # %%% Connection
-        #%% Toolbar
+        # %% Toolbar
         self.actionLoad.triggered.connect(self.load_files)
+        self.actionconvert_xml_to_hdf5.triggered.connect(self.convert_xml_to_hdf5)
 
         # %% Orient Tab
         self.pushButton_Orient_UpdatePlot.clicked.connect(self.update_orient_plot)
+        self.pushButton_Orient_Center.clicked.connect(self.orient_center)
         self.pushButton_Orient_RotatePos.clicked.connect(self.rotate_p90)
         self.pushButton_Orient_RotateNeg.clicked.connect(self.rotate_n90)
         self.pushButton_Orient_OrientVertical.clicked.connect(self.orient_vertical)
@@ -73,6 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.checkBox_FY_lw_strain.stateChanged.connect(self.enable_box_bound_young)
 
         self.pushButton_FH_plot.clicked.connect(self.plot_plastics)
+        self.pushButton_FH_export.clicked.connect(self.export_FH_plot)
         self.pushButton_FY_strain_diagram.clicked.connect(self.plot_strain_diagram)
 
         # %%% Status bar
@@ -80,13 +93,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.Qstatus_label.setMinimumSize(QSize(100, 0))
         self.statusbar.addWidget(self.Qstatus_label)
 
+        # %%% Enabling and disabling
+        self.tab_Orient.setEnabled(False)
+        self.tab_Analyse.setEnabled(False)
+        self.tab_Fitting.setEnabled(False)
 
         # %%% Prepare Popup
         self.pop_up = MplWidget(parent=None)
+        self.convert_popup = None
 
         # %%% Set Activation Status
         self.set_status_msg("Ready")
-
 
     def set_status_msg(self, status, update=True):
         self.Qstatus_label.setText(status)
@@ -107,6 +124,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.spinBox_A_plottimestep.setMinimum(-1 * self.TestSeries.get_timestep_safe_index())
             self.spinBox_A_plottimestep.setMaximum(self.TestSeries.get_timestep_safe_index())
             self.update_orient_plot()
+        self.tab_Orient.setEnabled(True)
+
+    @status_setter(message="Loading Files...")
+    def convert_xml_to_hdf5(self):
+
+        self.convert_popup = ConvertHdf5Popup(parent = None)
+        self.convert_popup.setVisible(True)
 
     # %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%      Action for Orient
     def update_orient_plot(self):
@@ -127,6 +151,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         [a_mpl_wdiget.get_ax().set_xlabel("X axis") for a_mpl_wdiget in self.mpl_widget_orient]
         [a_mpl_wdiget.get_ax().set_ylabel("Y axis") for a_mpl_wdiget in self.mpl_widget_orient]
         [a_mpl_wdiget.draw() for a_mpl_wdiget in self.mpl_widget_orient]
+
+    @status_setter(message="Rotating...")
+    def orient_center(self):
+        self.TestSeries.center_all()
+        self.update_orient_plot()
 
     @status_setter(message="Orienting...")
     def orient_vertical(self):
@@ -157,6 +186,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def validate_orient(self):
         self.actionLoad.setDisabled(True)
         self.tab_Orient.setDisabled(True)
+        self.tab_Fitting.setEnabled(True)
+        self.tab_Analyse.setEnabled(True)
         self.tabWidget.setCurrentIndex(1)
 
         self.comboBox_A_C_SL_name.insertItems(0, self.TestSeries.get_names())
@@ -188,16 +219,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def analyse(self):
         if self.Widget_Analyse_Cut.isEnabled():
             args = {
-            "method":"cut_line",
-            "offset_line": float(self.DoubleSpinBox_A_C_offset.value()),
-            "res_side": int(self.SpinBox_A_C_side_res.value()),
-            "res_cut_line": int(self.SpinBox_A_C_line_res.value()),
-            "kernel_size": float(self.DoubleSpinBox_A_C_kernel_size.value()),
-            "initial_width": float(self.doubleSpinBox_A_spec_width.value()),
-            "initial_thickness": float(self.doubleSpinBox_A_spec_thickness.value())}
+                "method": "cut_line",
+                "offset_line": float(self.DoubleSpinBox_A_C_offset.value()),
+                "res_side": int(self.SpinBox_A_C_side_res.value()),
+                "res_cut_line": int(self.SpinBox_A_C_line_res.value()),
+                "kernel_size": float(self.DoubleSpinBox_A_C_kernel_size.value()),
+                "initial_width": float(self.doubleSpinBox_A_spec_width.value()),
+                "initial_thickness": float(self.doubleSpinBox_A_spec_thickness.value())}
         else:
             args = {
-                "method":"ISO",
+                "method": "ISO",
                 "offset": float(self.doubleSpinBox_A_ISO_Offset.value()),
                 "lenght": float(self.DoubleSpinBox_A_ISO_lengh.value()),
                 "initial_width": float(self.doubleSpinBox_A_spec_width.value()),
@@ -205,6 +236,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             }
 
         self.TestSeries.analyse(args)
+        self.update_analyse_plot()
 
     @status_setter(message="Plotting...")
     def update_analyse_plot(self):
@@ -239,28 +271,24 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             [a_mpl_wdiget.plot_clear() for a_mpl_wdiget in self.mpl_widget_analyse]
             self.TestSeries.get_plot_results([a_mpl_wdiget.get_ax() for a_mpl_wdiget in self.mpl_widget_analyse],
-                                         keyword=keyword, timestep=timestep)
+                                             keyword=keyword, timestep=timestep)
             [a_mpl_wdiget.get_ax().set_aspect("equal") for a_mpl_wdiget in self.mpl_widget_analyse]
             [a_mpl_wdiget.get_ax().set_xlabel("X axis") for a_mpl_wdiget in self.mpl_widget_analyse]
             [a_mpl_wdiget.get_ax().set_ylabel("Y axis") for a_mpl_wdiget in self.mpl_widget_analyse]
             [a_mpl_wdiget.draw() for a_mpl_wdiget in self.mpl_widget_analyse]
 
     def pop_up_stress_strain_rate(self):
-        self.pop_up = MplWidget(parent=None)
-        self.pop_up.plot_clear()
-        self.TestSeries.get_plot_stress_strain_rate(self.pop_up.get_ax())
+        self.pop_up = PopupWidget(self.TestSeries,"stress_strain_rate",parent=None)
         self.pop_up.setVisible(True)
 
     def pop_up_stress_strain_plot(self):
-        self.pop_up = MplWidget(parent=None)
-        self.pop_up.plot_clear()
-        self.TestSeries.get_plot_stress_strain(self.pop_up.get_ax())
+        self.pop_up = PopupWidget( self.TestSeries,"stress_strain", parent=None )
         self.pop_up.setVisible(True)
 
     def pop_up_strain_line_plot(self):
         timestep = int(self.spinBox_A_C_SL_timesteps.value())
         name = self.comboBox_A_C_SL_name.currentText()
-        which= self.comboBox_A_C_SL_which.currentText()
+        which = self.comboBox_A_C_SL_which.currentText()
         self.pop_up = MplWidget(parent=None)
         self.pop_up.plot_clear()
         self.TestSeries.plot_strain_lines(self.pop_up.get_ax(), timestep=timestep, name=name, which=which)
@@ -320,30 +348,30 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             u_lw_strain = self.mplwidget_FY_plot.get_ax().get_xlim()[0]
             b_lw_strain = False
-        
+
         if self.checkBox_FY_lw_stress.isChecked():
             u_lw_stress = float(self.lineEdit_FY_lw_stress.text())
             b_lw_stress = True
         else:
             u_lw_stress = self.mplwidget_FY_plot.get_ax().get_ylim()[0]
             b_lw_stress = False
-        
+
         if self.checkBox_FY_up_strain.isChecked():
             u_up_strain = float(self.lineEdit_FY_up_strain.text())
             b_up_strain = True
         else:
             u_up_strain = self.mplwidget_FY_plot.get_ax().get_xlim()[1]
             b_up_strain = False
-        
+
         if self.checkBox_FY_up_stress.isChecked():
             u_up_stress = float(self.lineEdit_FY_up_stress.text())
             b_up_stress = True
         else:
             u_up_stress = self.mplwidget_FY_plot.get_ax().get_ylim()[1]
             b_up_stress = False
-            
+
         if b_lw_strain or b_up_strain:
-            delta = abs((u_up_strain - u_lw_strain)*0.15)
+            delta = abs((u_up_strain - u_lw_strain) * 0.15)
             if b_lw_strain:
                 b_lw_strain = u_lw_strain
                 u_lw_strain = u_lw_strain - delta
@@ -357,9 +385,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         else:
             b_up_strain = u_up_strain
             b_lw_strain = u_lw_strain
-        
+
         if b_lw_stress or b_up_stress:
-            delta = abs((u_up_stress - u_lw_stress)*0.15)
+            delta = abs((u_up_stress - u_lw_stress) * 0.15)
             if b_lw_stress:
                 b_lw_stress = u_lw_stress
                 u_lw_stress = u_lw_stress - delta
@@ -402,3 +430,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TestSeries.plot_plastic(self.mplwidget_FH.get_ax())
         self.mplwidget_FH.get_ax().grid()
         self.mplwidget_FH.draw()
+        self.pushButton_FH_export.setEnabled(True)
+
+
+    def export_FH_plot(self):
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+
+        if len(folderpath) == 0:
+            return
+
+        ax = self.mplwidget_FH.get_ax()
+
+        for line in ax.lines:
+            data = {ax.get_xlabel(): line.get_xdata(), ax.get_ylabel(): line.get_ydata()}
+            df = pd.DataFrame(data)
+            base_filename = line.get_label()
+            base_filename = base_filename.split(".")[0]
+            base_filename = base_filename + "_FH_Plot"
+            filePath = os.path.join(folderpath, base_filename + '.' + "csv")
+            df.to_csv(filePath)

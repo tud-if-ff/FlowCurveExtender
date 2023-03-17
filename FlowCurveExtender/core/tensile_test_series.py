@@ -1,25 +1,38 @@
+#  Copyright (c) 2023. Chair of Forming and Machining Processes, TU Dresden
+#   FlowCurveExtender, analysing tensile test beyond necking point
+#   This program is free software: you can redistribute it and/or modify
+#       it under the terms of the GNU Affero General Public License as
+#       published by the Free Software Foundation, either version 3 of the
+#       License, or (at your option) any later version.
+#       This program is distributed in the hope that it will be useful,
+#       but WITHOUT ANY WARRANTY; without even the implied warranty of
+#       MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#       GNU Affero General Public License for more details.
+#       You should have received a copy of the GNU Affero General Public License
+#       along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 import os
 
+import matplotlib.pyplot as plt
+import numpy
 import numpy as np
+from DIC_Exchange.HDF5Exchange import DIC_Result
 
 from FlowCurveExtender.core import tensile_test
-from DIC_Exchange.HDF5Exchange import DIC_Result
-import matplotlib
-import matplotlib.pyplot as plt
 
 
 class TensileTestSeries:
 
-    def __init__(self, the_tensile_tests:list[tensile_test.TensileTest]):
+    def __init__(self, the_tensile_tests: list[tensile_test.TensileTest]):
         self.tensile_tests = the_tensile_tests
         self.analysed = False
-        self.elastics = {"E":0.0, "v":0.0}
+        self.elastics = {"E": 0.0, "v": 0.0}
 
     def __len__(self):
         return len(self.tensile_tests)
 
     @classmethod
-    def load_from_paths(cls, paths:list[str]):
+    def load_from_paths(cls, paths: list[str]):
 
         tensile_test_list = []
         for a_path in paths:
@@ -43,6 +56,10 @@ class TensileTestSeries:
         for i in range((len(self.tensile_tests))):
             self.tensile_tests[i].orient_z(timestep=0)
 
+    def center_all(self, timestep=0):
+        for i in range((len(self.tensile_tests))):
+            self.tensile_tests[i].center(timestep=0)
+
     def orient_vertical_all(self, timestep=0):
         for i in range((len(self.tensile_tests))):
             self.tensile_tests[i].orient_vertical(timestep=0)
@@ -50,7 +67,8 @@ class TensileTestSeries:
     def orient_vertical_one(self, index, timestep=0):
         self.tensile_tests[index].orient_vertical(timestep=0)
 
-    def get_plot_results(self, axes:list[plt.Axes], keyword=None, timestep=0):
+
+    def get_plot_results(self, axes: list[plt.Axes], keyword=None, timestep=0):
         if isinstance(axes, list):
             if len(axes) != len(self.tensile_tests):
                 raise TypeError("Incorrect list size")
@@ -59,7 +77,7 @@ class TensileTestSeries:
                 plots.append(self.tensile_tests[i].analysis.plot(axes[i], keyword=keyword, timestep=timestep))
         return plots
 
-    def get_plot_all(self, axes:list[plt.Axes], keyword=None, timestep=0):
+    def get_plot_all(self, axes: list[plt.Axes], keyword=None, timestep=0):
         if isinstance(axes, list):
             if len(axes) != len(self.tensile_tests):
                 raise TypeError("Incorrect list size")
@@ -99,24 +117,54 @@ class TensileTestSeries:
             axes.set_ylabel("Force")
         axes.legend()
 
-    def get_plot_stress_strain(self, axes):
+    def get_plot_stress_strain(self, axes, window_size, smoothing_enabled):
+        plots = []
         for i in range(len(self.tensile_tests)):
             stress = self.tensile_tests[i].analysis.stress
             strain = self.tensile_tests[i].analysis.strain[1, :]
-            axes.plot(strain, stress, label=self.get_names()[i])
+
+            if (smoothing_enabled):
+                window = np.ones(window_size) / window_size
+
+                convolution = np.convolve(stress, window, "same")
+                convolution = convolution[:len(convolution)-window_size]
+                convolution = np.concatenate((convolution, stress[len(stress)-window_size:]))
+                plot = axes.plot(strain, convolution, label=self.get_names()[i])
+            else:
+                plot = axes.plot(strain, stress, label=self.get_names()[i])
+
+            plots.append(plot)
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
+        return plots
 
-    def get_plot_stress_strain_rate(self, axes):
+    def get_plot_stress_strain_rate(self, axes, window_size, smoothing_enabled ):
+        plots = []
         for i in range(len(self.tensile_tests)):
             time_rate = np.diff(self.tensile_tests[i].dic_results.time)
             strain_rate = np.diff(self.tensile_tests[i].analysis.strain[1, :])
             strain = self.tensile_tests[i].analysis.strain[1, :]
-            axes.plot(strain[1:], np.nan_to_num(strain_rate/time_rate), label=self.get_names()[i])
+            strain_to_time_rate = np.nan_to_num(strain_rate / time_rate)
+
+            if(smoothing_enabled):
+
+                window = np.ones(window_size) / window_size
+
+                convolution = np.convolve(strain_to_time_rate, window, "same")
+                convolution = convolution[:len(convolution) - window_size]
+                convolution = np.concatenate(
+                    (convolution, strain_to_time_rate[len(strain_to_time_rate) - window_size:]))
+
+                plot = axes.plot(strain[1:], convolution, label=self.get_names()[i])
+            else:
+                plot = axes.plot(strain[1:], strain_to_time_rate, label=self.get_names()[i])
+
+            plots.append(plot)
             axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
             axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
+        return plots
 
     def plot_strain_lines(self, axes, name, timestep=-1, which="Upper"):
         i = self.get_names().index(name)
@@ -128,7 +176,7 @@ class TensileTestSeries:
 
         E_mod = np.average([self.tensile_tests[i].analysis.young_mod for i in range(len(self.tensile_tests))])
         p_coe = np.average([self.tensile_tests[i].analysis.poisson for i in range(len(self.tensile_tests))])
-        self.elastics = {"E":E_mod, "v":p_coe}
+        self.elastics = {"E": E_mod, "v": p_coe}
 
     def get_str_fit_elastics(self):
         buff = ""
@@ -155,7 +203,6 @@ class TensileTestSeries:
         axes.set_ylabel(r"Strain ($\varepsilon_{yy}$)")
         axes.legend()
 
-
     def compute_plastics(self):
         for i in range(len(self.tensile_tests)):
             self.tensile_tests[i].analysis.compute_plastic(self.elastics)
@@ -169,4 +216,3 @@ class TensileTestSeries:
         axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
         axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
         axes.legend()
-
