@@ -3,7 +3,9 @@ from functools import wraps
 
 import matplotlib.patches as mpatches
 import numpy as np
+import pandas as pd
 from DIC_Exchange.convert_to import load_from
+from PySide6 import QtWidgets
 from PySide6.QtCore import *
 from PySide6.QtGui import *
 from PySide6.QtWidgets import *
@@ -83,6 +85,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.checkBox_FY_lw_strain.stateChanged.connect(self.enable_box_bound_young)
 
         self.pushButton_FH_plot.clicked.connect(self.plot_plastics)
+        self.pushButton_FH_export.clicked.connect(self.export_FH_plot)
         self.pushButton_FY_strain_diagram.clicked.connect(self.plot_strain_diagram)
 
         # %%% Status bar
@@ -427,3 +430,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.TestSeries.plot_plastic(self.mplwidget_FH.get_ax())
         self.mplwidget_FH.get_ax().grid()
         self.mplwidget_FH.draw()
+        self.pushButton_FH_export.setEnabled(True)
+
+
+    def export_FH_plot(self):
+        folderpath = QtWidgets.QFileDialog.getExistingDirectory(self, 'Select Folder')
+
+        if len(folderpath) == 0:
+            return
+
+        ax = self.mplwidget_FH.get_ax()
+
+        for line in ax.lines:
+            data = {ax.get_xlabel(): line.get_xdata(), ax.get_ylabel(): line.get_ydata()}
+            df = pd.DataFrame(data)
+            base_filename = line.get_label()
+            base_filename = base_filename.split(".")[0]
+            base_filename = base_filename + "_FH_Plot"
+            filePath = os.path.join(folderpath, base_filename + '.' + "csv")
+            df.to_csv(filePath)
