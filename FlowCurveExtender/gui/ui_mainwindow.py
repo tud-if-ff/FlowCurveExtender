@@ -593,6 +593,11 @@ class Ui_MainWindow(object):
 
         self.verticalLayout_A_Tools.addWidget(self.pushButton_A_compute)
 
+        self.pushButton_A_validate = QPushButton(self.horizontalLayoutWidget_2)
+        self.pushButton_A_validate.setObjectName(u"pushButton_A_validate")
+
+        self.verticalLayout_A_Tools.addWidget(self.pushButton_A_validate)
+
         self.horizontalLayout_6 = QHBoxLayout()
         self.horizontalLayout_6.setObjectName(u"horizontalLayout_6")
         self.pushButton_A_stress_strain_pop = QPushButton(self.horizontalLayoutWidget_2)
@@ -872,7 +877,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 1200, 23))
+        self.menubar.setGeometry(QRect(0, 0, 1200, 22))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuTools = QMenu(self.menubar)
@@ -969,6 +974,7 @@ class Ui_MainWindow(object):
         self.offsetCenterLabel.setText(QCoreApplication.translate("MainWindow", u"Offset Center", None))
         self.lenghLabel.setText(QCoreApplication.translate("MainWindow", u"Lengh:", None))
         self.pushButton_A_compute.setText(QCoreApplication.translate("MainWindow", u"Compute", None))
+        self.pushButton_A_validate.setText(QCoreApplication.translate("MainWindow", u"Validate", None))
         self.pushButton_A_stress_strain_pop.setText(QCoreApplication.translate("MainWindow", u"Plot stress strain diagram", None))
         self.pushButton_A_strain_rate_pop.setText(QCoreApplication.translate("MainWindow", u"Plot strain rate", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_Analyse), QCoreApplication.translate("MainWindow", u"Analyse", None))

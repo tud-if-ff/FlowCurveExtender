@@ -886,6 +886,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QPushButton" name="pushButton_A_validate">
+           <property name="text">
+            <string>Validate</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <layout class="QHBoxLayout" name="horizontalLayout_6">
            <item>
             <widget class="QPushButton" name="pushButton_A_stress_strain_pop">
@@ -1358,7 +1365,7 @@
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

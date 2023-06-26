@@ -62,6 +62,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.activate_methods()
         self.comboBox_A_methodchoice.currentIndexChanged.connect(self.activate_methods)
         self.pushButton_A_compute.clicked.connect(self.analyse)
+        self.pushButton_A_validate.clicked.connect(self.validate_analyse)
         self.pushButton_A_update_plot.clicked.connect(self.update_analyse_plot)
         self.pushButton_A_stress_strain_pop.clicked.connect(self.pop_up_stress_strain_plot)
         self.pushButton_A_strain_rate_pop.clicked.connect(self.pop_up_stress_strain_rate)
@@ -237,6 +238,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.TestSeries.analyse(args)
         self.update_analyse_plot()
+
+    def validate_analyse(self):
+        self.tab_Hardening.setEnabled(True)
+        self.tab_Young.setEnabled(True)
+        self.tab_Analyse.setEnabled(False)
+        self.tabWidget.setCurrentIndex(2)
 
     @status_setter(message="Plotting...")
     def update_analyse_plot(self):

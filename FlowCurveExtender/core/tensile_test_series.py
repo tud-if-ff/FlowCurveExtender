@@ -161,8 +161,8 @@ class TensileTestSeries:
                 plot = axes.plot(strain[1:], strain_to_time_rate, label=self.get_names()[i])
 
             plots.append(plot)
-            axes.set_xlabel(r"Strain ($\varepsilon_{yy}$)")
-            axes.set_ylabel(r"Stress ($\sigma_{yy}$)")
+            axes.set_xlabel(r"Time")
+            axes.set_ylabel(r"Strain rate ($\dot{\sigma_{yy}}$)")
         axes.legend()
         return plots
 
